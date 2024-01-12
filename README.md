@@ -22,6 +22,12 @@ Within your terminal in the project directory, run
 ### To test your own playbook
 - Edit content in `playbook.yml`
 - Change `function run_ansible_playbook()` in `run.sh` as needed 
+
+### When not to use this template
+- You want to use ansible to define your infrastructure
+- Anything comes very heavy like k3s/helm/docker swarm/anything cluster-like
+
+
 ### run.sh
 ```bash
 #!/usr/bin/env bash
