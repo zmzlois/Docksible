@@ -1,29 +1,3 @@
-# Docksible
- Lightweight docker container to test Ansible playbook
-
-## Includes: 
-    1. Shell script
-        - set up temporary SSH keys to SSH into the container
-        - create a docker container, spin it up and clean up after the playbook finished running, whether failed or succeed
-        - setup temporary inventory file
-        - A minimal playbook example 
-    2. Dockerfile
-    3. A minimal playbook to SSH into the container to execute commands
-    4. Ansible configuration file
-
-## How to use it
-
-Create a repository by this template, make sure you have [docker](https://www.docker.com/get-started/) installed and running. 
-Within your terminal in the project directory, run 
-
-```bash
-./run.sh
-```
-### To test your own playbook
-- Edit content in `playbook.yml`
-- Change `function run_ansible_playbook()` in `run.sh` as needed 
-### run.sh
-```bash
 #!/usr/bin/env bash
 
 set -euo pipefail
@@ -118,30 +92,3 @@ create_temporary_ssh_id
 start_container
 setup_test_inventory
 run_ansible_playbook
-```
-
-
-### Ansible playbook example
-```yaml
----
-# yamllint disable rule:line-length
-- name: Setup Machine
-  hosts: target_group # The host address/name was created in run.sh and stored in inventory file
-  gather_facts: false # speed up execution. Facts include information about the host's operating system, hardware, and other details. 
-  become: true # run task as privilege user
-
-  tasks:
-    - name: Install requirements
-      apt:
-        update_cache: true
-        pkg:
-          - python3
-          - flake8
-          - pylint
-          - python3-pip
-        state: latest
-      register: task_result # registers the result of the task in a variable named task_result. allow access information about the task outcome later in the playbook.
-      until: not task_result.failed # a loop condition that specifies that the task should be retried until the condition not task_result.failed is true. In other words, it will keep retrying the task as long as it fails.
-      retries: 3
-
-```

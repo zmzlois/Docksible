@@ -1,0 +1,20 @@
+---
+# yamllint disable rule:line-length
+- name: Setup Machine
+  hosts: target_group # The host address/name was created in run.sh and stored in inventory file
+  gather_facts: false # speed up execution. Facts include information about the host's operating system, hardware, and other details. 
+  become: true # run task as privilege user
+
+  tasks:
+    - name: Install requirements
+      apt:
+        update_cache: true
+        pkg:
+          - python3
+          - flake8
+          - pylint
+          - python3-pip
+        state: latest
+      register: task_result # registers the result of the task in a variable named task_result. allow access information about the task outcome later in the playbook.
+      until: not task_result.failed # a loop condition that specifies that the task should be retried until the condition not task_result.failed is true. In other words, it will keep retrying the task as long as it fails.
+      retries: 3
