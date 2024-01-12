@@ -123,7 +123,7 @@ function run_ansible_playbook() {
 }
 
 setup_tempdir
-trap cleanup EXIT
+trap cleanup EXIT # set up a trap for any EXIT or ERR signal and make sure the clean up function runs to clean up keys, inventory file and docker container
 trap cleanup ERR
 create_temporary_ssh_id
 start_container
