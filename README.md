@@ -32,7 +32,12 @@ Within your terminal in the project directory, run
 ```bash
 #!/usr/bin/env bash
 
+# Strict error handling. 
 set -euo pipefail
+# `set -e` exit immediately if any command it runs exits with a non-zero status (indicating an error). catching errors early and prevents the script from continuing with potentially incorrect or incomplete results.
+# `set -u` treat unset variable as error
+# `set -o pipefail` causes a pipeline (commands connected by `|`) to return a non-zero status if any commands in the pipeline fails
+# make the script less prone to subtle errrors
 
 # generate a random string with number for container's name 
 identifier="$(< /dev/urandom tr -dc 'a-z0-9' | fold -w 5 | head -n 1)" ||:
